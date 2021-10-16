@@ -18,10 +18,6 @@ def compress(image):
     new_image = File(im_io, name=image.name)
     return new_image
 
-# Method for adding Likes to the Post
-class Likes(models.Model):
-	user = models.ForeignKey(User, on_delete=models.CASCADE)
-
 
 # Blog Posts Model
 class Post(models.Model):
@@ -35,7 +31,7 @@ class Post(models.Model):
     meta_description = models.CharField(max_length=500)
     publish_state = models.CharField(max_length=10, choices=(('publish', 'PUBLISH'), ('draft', 'DRAFT')))
     featured_image = models.ImageField(upload_to='blog/image/', default="")
-    likes = models.ManyToManyField(Likes, blank=True)
+    likes = models.ManyToManyField(User, blank=True)
 
 
     def save(self, *args, **kwargs):
@@ -46,11 +42,6 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
-
-# ManytoManyfield for storing the users bookmarked posts
-class Bookmarks(models.Model):
-	post = models.ForeignKey(Post, on_delete=models.CASCADE)
-
 # Blogs Comments Model
 class BlogComment(models.Model):
     sno = models.AutoField(primary_key=True)
@@ -59,7 +50,6 @@ class BlogComment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
     timestamp = models.DateTimeField(default=now)
-    bookmarks = models.ManyToManyField(Bookmarks, blank=True)
 
     def __str__(self):
         return self.comment[0:13] + '...' + " by " + self.user.username

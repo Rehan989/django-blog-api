@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import Post, BlogComment
 
-# Product serializer for showing details as described 
+# Post serializer for showing details as described 
 class PostSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Post
@@ -17,4 +17,19 @@ class PostSerializer(serializers.ModelSerializer):
 			"publish_state",
 			"featured_image",
 			"likes"
+		)
+
+
+
+# Comment serializer for showing details as described 
+class CommentSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = BlogComment
+		fields = (
+			'sno',
+			"comment",
+			"user",
+			"post",
+			"parent",
+			"timestamp",
 		)
