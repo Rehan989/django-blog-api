@@ -138,3 +138,45 @@ class RemoveLike(APIView):
 		except Exception as e:
 			print(e)
 			return Response({"error":"Internal Server Error"})
+
+
+# Method for Removing likes from blog post
+class AddComment(APIView):
+	def post(self, request, format=None):
+		try:
+			# Extracting Page Size from get body
+			email = request.data['email']
+			username = request.data['username']
+			postSno = request.data['sno']
+			commentBody = request.data['commentBody']
+			if(email, username, postSno,commentBody):
+				try:
+					user = User.objects.get(email=email, username=username)
+					if(user):
+						post = Post.objects.get(sno=postSno)
+						if(post):
+							try:
+								if(request.data["commentSno"]=="-1"):
+									comment = BlogComment(user=user, post=post, comment=commentBody)
+									comment.save()
+									return Response("Comment Added Succesfully")
+								else:
+									commentSno = int(request.data["commentSno"])
+									parentComment = BlogComment.objects.get(sno=commentSno)
+									comment = BlogComment(user=user, post=post, parent=parentComment,comment=commentBody)
+									comment.save()
+									return Response("Reply Added Succesfully")
+							except Exception as e:
+								return Response({"error":"Internal server error!"})
+						else:
+							return Response({"error":"Post not found!"})
+					else:
+						return Response({"error":"User not found!"})
+				except Exception as e:
+					print(e)
+					return Response({"error":"Internal servor error!"})
+			else:
+				return Response({"error":f"Fields not provided!"})
+		except Exception as e:
+			print(e)
+			return Response({"error":"Internal Server Error"})
