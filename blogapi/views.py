@@ -10,7 +10,7 @@ from userauthapi.serializers import User
 from .serializers import PostSerializer,CommentSerializer
 
 # Models impor
-from .models import Post, BlogComment
+from .models import Post, BlogComment, Likes
 
 # Method for fetching LatsetBlogPosts
 class LatestBlogPosts(APIView):
@@ -94,7 +94,38 @@ class Addlike(APIView):
 						if(post):
 							post.likes.add(user)
 							post.save()
-							return Response({"error":"Updated Succesfully!"})
+							return Response({"error":f"Updated Succesfully! Total likes: {post.total_likes()}"})
+						else:
+							return Response({"error":"Post not found!"})
+					else:
+						return Response({"error":"User not found!"})
+				except Exception as e:
+					print(e)
+					return Response({"error":"Internal servor error!"})
+			else:
+				return Response({"error":"Fields not provided!"})
+		except Exception as e:
+			print(e)
+			return Response({"error":"Internal Server Error"})
+
+
+# Method for Removing likes from blog post
+class RemoveLike(APIView):
+	def post(self, request, format=None):
+		try:
+			# Extracting Page Size from get body
+			email = request.data['email']
+			username = request.data['username']
+			postSno = request.data['sno']
+			if(email, username):
+				try:
+					user = User.objects.get(email=email, username=username)
+					if(user):
+						post = Post.objects.get(sno=postSno)
+						if(post):
+							post.likes.remove(user)
+							post.save()
+							return Response({"error":f"Updated Succesfully! Total likes: {post.total_likes()}"})
 						else:
 							return Response({"error":"Post not found!"})
 					else:

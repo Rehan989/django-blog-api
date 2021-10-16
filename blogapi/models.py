@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.fields.related import ForeignKey
+# from django.contrib.postgres.fields import ArrayField
 from django.utils.timezone import now
 from io import BytesIO
 from PIL import Image
@@ -18,6 +19,12 @@ def compress(image):
     new_image = File(im_io, name=image.name)
     return new_image
 
+class Likes(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(default=now)
+
+    def __str__(self):
+        return self.user.username
 
 # Blog Posts Model
 class Post(models.Model):
@@ -31,8 +38,10 @@ class Post(models.Model):
     meta_description = models.CharField(max_length=500)
     publish_state = models.CharField(max_length=10, choices=(('publish', 'PUBLISH'), ('draft', 'DRAFT')))
     featured_image = models.ImageField(upload_to='blog/image/', default="")
-    likes = models.ManyToManyField(User, blank=True)
+    likes = models.ManyToManyField(User, related_name="blog_posts", blank=True)
 
+    def total_likes(self):
+        return self.likes.count()
 
     def save(self, *args, **kwargs):
         if self.featured_image:
