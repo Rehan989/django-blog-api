@@ -18,16 +18,15 @@ class LatestBlogPosts(APIView):
 		try:
 			# Extracting Page Size from get body
 			pageSize = request.data['pageSize']
-			if(pageSize):
-				blogPosts = Post.objects.all().exclude(publish_state="draft")[0:int(pageSize)]
-				serializer = PostSerializer(blogPosts, many=True)
-				# Returning Parsed Posts
-				return Response(serializer.data)
-			else:
-				blogPosts = Post.objects.all().exclude(publish_state=="draft")[0:6]
-				serializer = PostSerializer(blogPosts, many=True)
-				# Return 6 latest Parsed posts if pageSize is not provided
-				return Response(serializer.data)
+			blogPosts = Post.objects.all().exclude(publish_state="draft")[0:int(pageSize)]
+			serializer = PostSerializer(blogPosts, many=True)
+			# Returning Parsed Posts
+			return Response({"posts":serializer.data, "success":"Success!"})
+		except KeyError:
+			blogPosts = Post.objects.all().exclude(publish_state="draft")[0:6]
+			serializer = PostSerializer(blogPosts, many=True)
+			# Return 6 latest Parsed posts if pageSize is not provided
+			return Response({"posts":serializer.data, "success":"Success!"})
 		except Exception as e:
 			return Response({"error":"Internal Server Error"})
 
@@ -46,11 +45,13 @@ class BlogPosts(APIView):
 					blogPosts = Post.objects.all().exclude(publish_state="draft")[pageNumber*8:pageNumber*8+8]
 					serializer = PostSerializer(blogPosts, many=True)
 					# Sending data after parsing it
-					return Response(serializer.data)
+					return Response({"posts":serializer.data, "success":"Success!"})
+				except KeyError:
+					return Response({"posts":[], "success":"Success!"})
 				except Exception as e:
 					# print(e)
 					# Returning empty list if blog pages value is 0
-					return Response([])
+					return Response({"error":"Internal Servor Error!"})
 			else:
 				# Throwing Error if pageNumber is not provided
 				return Response({"error":"Not found!"})
@@ -70,7 +71,7 @@ class SingleBlogPosts(APIView):
 				commentSerializer = CommentSerializer(comments, many=True)
 				postSerializer = PostSerializer(post)
 				# Returning Parsed Post
-				return Response({"post": postSerializer.data, "comments":commentSerializer.data})
+				return Response({"post": postSerializer.data, "comments":commentSerializer.data, "success":"Blog found Successfully"})
 			else:
 				return Response({"error":"Not found!"})
 		except Exception as e:
@@ -102,8 +103,8 @@ class Addlike(APIView):
 				except Exception as e:
 					print(e)
 					return Response({"error":"Internal servor error!"})
-			else:
-				return Response({"error":"Fields not provided!"})
+		except KeyError:
+			return Response({"error":"Fields not provided!"})
 		except Exception as e:
 			print(e)
 			return Response({"error":"Internal Server Error"})
@@ -133,7 +134,7 @@ class RemoveLike(APIView):
 				except Exception as e:
 					print(e)
 					return Response({"error":"Internal servor error!"})
-			else:
+		except KeyError:
 				return Response({"error":"Fields not provided!"})
 		except Exception as e:
 			print(e)
@@ -159,13 +160,13 @@ class AddComment(APIView):
 								if(request.data["commentSno"]=="-1"):
 									comment = BlogComment(user=user, post=post, comment=commentBody)
 									comment.save()
-									return Response("Comment Added Succesfully")
+									return Response({"success":"Comment Added Succesfully"})
 								else:
 									commentSno = int(request.data["commentSno"])
 									parentComment = BlogComment.objects.get(sno=commentSno)
 									comment = BlogComment(user=user, post=post, parent=parentComment,comment=commentBody)
 									comment.save()
-									return Response("Reply Added Succesfully")
+									return Response({"success":"Reply Added Succesfully"})
 							except Exception as e:
 								return Response({"error":"Internal server error!"})
 						else:
