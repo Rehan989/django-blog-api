@@ -113,6 +113,16 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Change this all with environment variables
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'mail.smtp2go.com'
+EMAIL_PORT = 2525
+EMAIL_HOST_USER = 'rehan989'
+EMAIL_HOST_PASSWORD = 'ZXF2ZzJ5OXZmZjAw'
+
+DEFAULT_FROM_EMAIL = "Rehan <no-reply@prodev.pro>"
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
@@ -160,12 +170,22 @@ SIMPLE_JWT = {
 }
 
 DJOSER = {
+    'ACTIVATION_URL': 'user/activate-account/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': True,
     "SERIALIZERS": {
         "user_create": "userauthapi.serializers.UserCreateSerializer",  # custom serializer
         "user": "djoser.serializers.UserSerializer",
         "current_user": "djoser.serializers.UserSerializer",
         "user_delete": "djoser.serializers.UserSerializer",
     },
+    'EMAIL':{
+        'activation': 'djoser.email.ActivationEmail',
+        'confirmation': 'djoser.email.ConfirmationEmail',
+        'password_reset': 'djoser.email.PasswordResetEmail',
+        'password_changed_confirmation': 'djoser.email.PasswordChangedConfirmationEmail',
+        'username_changed_confirmation': 'djoser.email.UsernameChangedConfirmationEmail',
+        'username_reset': 'djoser.email.UsernameResetEmail',
+    }
 }
 
 MEDIA_URL = "/media/"
