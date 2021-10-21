@@ -171,7 +171,10 @@ SIMPLE_JWT = {
 
 DJOSER = {
     'ACTIVATION_URL': 'user/activate-account/{uid}/{token}',
-    'SEND_ACTIVATION_EMAIL': True,
+    'PASSWORD_RESET_CONFIRM_URL': 'user/reset-password/{uid}/{token}',
+    'USERNAME_RESET_CONFIRM_URL': 'user/reset-username/{uid}/{token}',
+    'PASSWORD_RESET_CONFIRM_RETYPE':True,
+    'SEND_ACTIVATION_EMAIL': False,
     "SERIALIZERS": {
         "user_create": "userauthapi.serializers.UserCreateSerializer",  # custom serializer
         "user": "djoser.serializers.UserSerializer",
@@ -190,3 +193,12 @@ DJOSER = {
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+
+# Caching
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': '/var/tmp/django_cache',
+    }
+}
