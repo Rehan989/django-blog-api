@@ -5,6 +5,7 @@ from djoser.conf import django_settings
 from rest_framework.views import APIView
 from rest_framework import permissions
 from django.urls import reverse
+from djoser import email
 from rest_framework.decorators import (
     api_view,
     permission_classes,
@@ -85,3 +86,8 @@ class UserResetUsername(APIView):
             return Response({"error":"Internal server error!"})
     def get(self, request, uid, token):
         return Response({'error':'Page not found!'})
+
+
+# Overriding activation email
+class ActivationEmail(email.ActivationEmail):
+    template_name = 'email/activation.html'

@@ -68,7 +68,7 @@ ROOT_URLCONF = 'DjangoBlogApi.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates/'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -174,7 +174,7 @@ DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': 'user/reset-password/{uid}/{token}',
     'USERNAME_RESET_CONFIRM_URL': 'user/reset-username/{uid}/{token}',
     'PASSWORD_RESET_CONFIRM_RETYPE':True,
-    'SEND_ACTIVATION_EMAIL': False,
+    'SEND_ACTIVATION_EMAIL': True,
     "SERIALIZERS": {
         "user_create": "userauthapi.serializers.UserCreateSerializer",  # custom serializer
         "user": "djoser.serializers.UserSerializer",
@@ -199,6 +199,6 @@ MEDIA_ROOT = BASE_DIR / "media"
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': '/var/tmp/django_cache',
+        'LOCATION': 'G:/var/tmp/django_cache',
     }
 }
