@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
-    # 'corsheaders',
+    'corsheaders',
     'djoser',
 
     # Reistering apps
@@ -48,9 +48,9 @@ INSTALLED_APPS = [
 ]
 
 # Cors header configuration
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:3000"
-# ]
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000"
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
