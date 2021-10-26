@@ -37,7 +37,7 @@ class Post(models.Model):
     last_updated = models.DateTimeField(blank=True)
     meta_description = models.CharField(max_length=500)
     publish_state = models.CharField(max_length=10, choices=(('publish', 'PUBLISH'), ('draft', 'DRAFT')))
-    featured_image = models.ImageField(upload_to='blog/image/', default="")
+    featured_image = models.ImageField(upload_to='blog/images/')
     likes = models.ManyToManyField(User, related_name="blog_posts", blank=True)
 
     def total_likes(self):

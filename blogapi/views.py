@@ -10,9 +10,14 @@ from userauthapi.serializers import User
 from .serializers import PostSerializer,CommentSerializer
 
 # Models impor
-from .models import Post, BlogComment, Likes
+from .models import Post, BlogComment
 
-# Method for fetching LatsetBlogPosts
+from rest_framework import permissions
+from rest_framework.decorators import (
+    permission_classes,
+)
+
+# Method for fetching LatestBlogPosts
 class LatestBlogPosts(APIView):
 	def get(self, request, format=None):
 		try:
@@ -29,6 +34,16 @@ class LatestBlogPosts(APIView):
 			return Response({"posts":serializer.data, "success":"Success!"})
 		except Exception as e:
 			return Response({"error":"Internal Server Error"})
+
+# class PopularBlogPosts(APIView):
+# 	def get(self, request, format=None):
+# 		try:
+# 			blogPosts = Post.objects.all().distinct()
+# 			serializer = PostSerializer(blogPosts, many=True)
+# 			return Response({"posts":serializer.data, "success":"Success!"})
+# 		except Exception as e:
+# 			print(e)
+# 			return Response({"error":"Internal Server Error"})
 
 
 # Method for fetching Blogposts Through page Number
@@ -80,12 +95,14 @@ class SingleBlogPosts(APIView):
 
 
 # Method for Adding likes to blog post
+@permission_classes([permissions.IsAuthenticated])
 class Addlike(APIView):
 	def put(self, request, format=None):
 		try:
 			# Extracting Page Size from get body
-			email = request.data['email']
-			username = request.data['username']
+			# Change all this type of clutters with token Authorization
+			email = request.user.email
+			username = request.user.username
 			postSno = request.data['sno']
 			if(email, username):
 				try:
@@ -103,7 +120,8 @@ class Addlike(APIView):
 				except Exception as e:
 					print(e)
 					return Response({"error":"Internal servor error!"})
-		except KeyError:
+		except KeyError as e:
+			print(e)
 			return Response({"error":"Fields not provided!"})
 		except Exception as e:
 			print(e)
@@ -111,12 +129,13 @@ class Addlike(APIView):
 
 
 # Method for Removing likes from blog post
+@permission_classes([permissions.IsAuthenticated])
 class RemoveLike(APIView):
 	def post(self, request, format=None):
 		try:
 			# Extracting Page Size from get body
-			email = request.data['email']
-			username = request.data['username']
+			email = request.user.email
+			username = request.user.username
 			postSno = request.data['sno']
 			if(email, username):
 				try:
@@ -141,13 +160,14 @@ class RemoveLike(APIView):
 			return Response({"error":"Internal Server Error"})
 
 
-# Method for Removing likes from blog post
+# Method for Adding comments to blog post
+@permission_classes([permissions.IsAuthenticated])
 class AddComment(APIView):
 	def post(self, request, format=None):
 		try:
-			# Extracting Page Size from get body
-			email = request.data['email']
-			username = request.data['username']
+			# Extracting Required values from get body
+			email = request.user.email
+			username = request.user.username
 			postSno = request.data['sno']
 			commentBody = request.data['commentBody']
 			if(email, username, postSno,commentBody):
@@ -168,6 +188,7 @@ class AddComment(APIView):
 									comment.save()
 									return Response({"success":"Reply Added Succesfully"})
 							except Exception as e:
+								print(e)
 								return Response({"error":"Internal server error!"})
 						else:
 							return Response({"error":"Post not found!"})
