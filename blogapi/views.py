@@ -35,27 +35,15 @@ class LatestBlogPosts(APIView):
 		except Exception as e:
 			return Response({"error":"Internal Server Error"})
 
-# class PopularBlogPosts(APIView):
-# 	def get(self, request, format=None):
-# 		try:
-# 			blogPosts = Post.objects.all().distinct()
-# 			serializer = PostSerializer(blogPosts, many=True)
-# 			return Response({"posts":serializer.data, "success":"Success!"})
-# 		except Exception as e:
-# 			print(e)
-# 			return Response({"error":"Internal Server Error"})
-
 
 # Method for fetching Blogposts Through page Number
 class BlogPosts(APIView):
-	def get(self, request, format=None):
+	def get(self, request, pageNumber, format=None):
 		try:
 			# Defining pageSize of all the pages
 			pageSize = 8
-			pageNumber = request.data["pageNumber"]
-			if(pageNumber):
+			if(pageNumber>=0):
 				try:
-					pageNumber = int(pageNumber)
 					# Returning the bloposts according to blog page and pageSize
 					blogPosts = Post.objects.all().exclude(publish_state="draft")[pageNumber*8:pageNumber*8+8]
 					serializer = PostSerializer(blogPosts, many=True)
@@ -76,12 +64,11 @@ class BlogPosts(APIView):
 
 # Method for fetching the blog posts with comments
 class SingleBlogPosts(APIView):
-	def get(self, request, format=None):
+	def get(self, request, slug, format=None):
 		try:
 			# Extracting Page Size from get body
-			sno = request.data['sno']
-			if(sno):
-				post = Post.objects.get(sno=sno)
+			if(slug):
+				post = Post.objects.get(slug=slug)
 				comments = BlogComment.objects.filter(post=post)
 				commentSerializer = CommentSerializer(comments, many=True)
 				postSerializer = PostSerializer(post)
@@ -201,4 +188,24 @@ class AddComment(APIView):
 				return Response({"error":f"Fields not provided!"})
 		except Exception as e:
 			print(e)
+			return Response({"error":"Internal Server Error"})
+
+
+
+
+class SearchPost(APIView):
+	def get(self, request, format=None):
+		try:
+			query=request.GET['query']
+			print(query)
+			if len(query)>8:
+				allPosts = Post.objects.none()
+			else:
+				allPostsTitle = Post.objects.filter(title__icontains=query).exclude(publish_state="draft")
+				allPostsAuthor = Post.objects.filter(author__icontains=query).exclude(publish_state="draft")
+				allPostsContent = Post.objects.filter(content__icontains=query).exclude(publish_state="draft")
+				allPosts = allPostsTitle.union(allPostsAuthor, allPostsContent)
+			serializer = PostSerializer(allPosts, many=True)
+			return Response({"results":serializer.data, "success":True})
+		except Exception as e:
 			return Response({"error":"Internal Server Error"})
