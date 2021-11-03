@@ -16,23 +16,27 @@ from rest_framework import permissions
 from rest_framework.decorators import (
     permission_classes,
 )
+from django.db.models import Min
 
 # Method for fetching LatestBlogPosts
 class LatestBlogPosts(APIView):
 	def get(self, request, format=None):
 		try:
 			# Extracting Page Size from get body
-			pageSize = request.data['pageSize']
-			blogPosts = Post.objects.all().exclude(publish_state="draft")[0:int(pageSize)]
+			pageSize = request.GET['pageSize']
+			# blogPosts = Post.objects.all().exclude(publish_state="draft")[0:int(pageSize)]
+			blogPosts = Post.objects.order_by('-last_updated').exclude(publish_state="draft")[0:int(pageSize)]
 			serializer = PostSerializer(blogPosts, many=True)
 			# Returning Parsed Posts
 			return Response({"posts":serializer.data, "success":"Success!"})
 		except KeyError:
-			blogPosts = Post.objects.all().exclude(publish_state="draft")[0:6]
+			# blogPosts = Post.objects.all().exclude(publish_state="draft")[0:6]
+			blogPosts = Post.objects.order_by('-last_updated').exclude(publish_state="draft")[0:6]
 			serializer = PostSerializer(blogPosts, many=True)
 			# Return 6 latest Parsed posts if pageSize is not provided
 			return Response({"posts":serializer.data, "success":"Success!"})
 		except Exception as e:
+			print(e)
 			return Response({"error":"Internal Server Error"})
 
 
@@ -45,7 +49,7 @@ class BlogPosts(APIView):
 			if(pageNumber>=0):
 				try:
 					# Returning the bloposts according to blog page and pageSize
-					blogPosts = Post.objects.all().exclude(publish_state="draft")[pageNumber*8:pageNumber*8+8]
+					blogPosts = Post.objects.order_by('-last_updated').exclude(publish_state="draft")[pageNumber*8:pageNumber*8+8]
 					serializer = PostSerializer(blogPosts, many=True)
 					# Sending data after parsing it
 					return Response({"posts":serializer.data, "success":"Success!"})
@@ -63,7 +67,22 @@ class BlogPosts(APIView):
 
 
 # Method for fetching the blog posts with comments
-class SingleBlogPosts(APIView):
+class FetchBlogPost(APIView):
+	def get(self, request, slug, format=None):
+		try:
+			# Extracting Page Size from get body
+			if(slug):
+				post = Post.objects.get(slug=slug)
+				postSerializer = PostSerializer(post)
+				# Returning Parsed Post
+				return Response({"post": postSerializer.data, "success":"Blog found Successfully"})
+			else:
+				return Response({"error":"Not found!"})
+		except Exception as e:
+			print(e)
+			return Response({"error":"Internal Server Error"})
+
+class FetchComments(APIView):
 	def get(self, request, slug, format=None):
 		try:
 			# Extracting Page Size from get body
@@ -71,9 +90,10 @@ class SingleBlogPosts(APIView):
 				post = Post.objects.get(slug=slug)
 				comments = BlogComment.objects.filter(post=post)
 				commentSerializer = CommentSerializer(comments, many=True)
-				postSerializer = PostSerializer(post)
+				for commentSerial, comment in zip(commentSerializer.data, comments):
+					commentSerial['user'] = str(comment.user)
 				# Returning Parsed Post
-				return Response({"post": postSerializer.data, "comments":commentSerializer.data, "success":"Blog found Successfully"})
+				return Response({"comments":commentSerializer.data, "success":"Blog found Successfully"})
 			else:
 				return Response({"error":"Not found!"})
 		except Exception as e:
