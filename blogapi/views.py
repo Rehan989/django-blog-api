@@ -119,7 +119,7 @@ class Addlike(APIView):
 						if(post):
 							post.likes.add(user)
 							post.save()
-							return Response({"error":f"Updated Succesfully! Total likes: {post.total_likes()}"})
+							return Response({"success":f"Updated Succesfully! Total likes: {post.total_likes()}"})
 						else:
 							return Response({"error":"Post not found!"})
 					else:
@@ -152,7 +152,7 @@ class RemoveLike(APIView):
 						if(post):
 							post.likes.remove(user)
 							post.save()
-							return Response({"error":f"Updated Succesfully! Total likes: {post.total_likes()}"})
+							return Response({"success":f"Updated Succesfully! Total likes: {post.total_likes()}"})
 						else:
 							return Response({"error":"Post not found!"})
 					else:
