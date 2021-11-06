@@ -1,8 +1,8 @@
 from django.contrib import admin
-from .models import Post, BlogComment
+from .models import Post, BlogComment, Contact
 # Models Reigistration
 
-admin.site.register((BlogComment))
+admin.site.register((BlogComment, Contact))
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):

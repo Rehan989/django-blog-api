@@ -10,7 +10,7 @@ from userauthapi.serializers import User
 from .serializers import PostSerializer,CommentSerializer
 
 # Models impor
-from .models import Post, BlogComment
+from .models import Post, BlogComment, Contact
 
 from rest_framework import permissions
 from rest_framework.decorators import (
@@ -228,4 +228,19 @@ class SearchPost(APIView):
 			serializer = PostSerializer(allPosts, many=True)
 			return Response({"results":serializer.data, "success":True})
 		except Exception as e:
+			return Response({"error":"Internal Server Error"})
+
+
+@permission_classes([permissions.IsAuthenticated])
+class AddContact(APIView):
+	def put(self, request, format=None):
+		try:
+			email = request.user.email
+			username = request.user.username
+			contactBody = request.data['contactBody']
+			contact = Contact(email=email,name=username,contactBody=contactBody)
+			contact.save()
+			return Response({"success":"Contact form submitted successfully"})
+		except Exception as e:
+			print(e)
 			return Response({"error":"Internal Server Error"})

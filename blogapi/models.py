@@ -61,4 +61,15 @@ class BlogComment(models.Model):
     timestamp = models.DateTimeField(default=now)
 
     def __str__(self):
-        return self.comment[0:13] + '...' + " by " + self.user.username
+        return self.comment[0:13] + '...' + self.user.username
+
+# Contact model
+class Contact(models.Model):
+    sno = models.AutoField(primary_key=True)
+    email = models.CharField(max_length=135)
+    name = models.CharField(max_length=95)
+    contactBody = models.TextField()
+    timestamp = models.DateTimeField(default=now)
+
+    def __str__(self):
+        return self.email + '...' + " by " + self.contactBody[0:18]
