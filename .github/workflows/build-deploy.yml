@@ -4,7 +4,16 @@ on: [push, pull_request]
 
 jobs:
   job1:
-    runs-on: ubuntu-latest
+    env:
+      SECRET_KEY: django-insecure--n6t$=^+p+(b188e-5phqheprmpikg-sidiyu8hgrbe64u)akh
+      DEBUG: True
+      EMAIL_USE_SSL: True
+      EMAIL_HOST: smtpout.secureserver.net
+      EMAIL_PORT: 465
+      EMAIL_HOST_USER: admin@prodev.pro
+      EMAIL_HOST_PASSWORD: Rehan876685$
+      DEFAULT_FROM_EMAIL: Rehan <admin@prodev.pro>
+      runs-on: ubuntu-latest
     steps:
       - name: pulling git repo
         uses: actions/checkout@v2
