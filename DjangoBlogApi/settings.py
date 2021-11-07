@@ -91,13 +91,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-    },
-    # 'postgresql': {
-    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #     'NAME': 'djangoblogapp',
-    #     'USER':'postgres',
-    #     'PASSWORD': 'rehan',
-    # }
+    }
 }
 
 
@@ -122,13 +116,12 @@ AUTH_PASSWORD_VALIDATORS = [
 # Change this all with environment variables
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'mail.smtp2go.com'
-EMAIL_PORT = 2525
-EMAIL_HOST_USER = 'rehan989'
-EMAIL_HOST_PASSWORD = 'ZXF2ZzJ5OXZmZjAw'
-
-DEFAULT_FROM_EMAIL = "Rehan <no-reply@prodev.pro>"
+EMAIL_USE_SSL = True
+EMAIL_HOST = 'smtpout.secureserver.net'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'admin@prodev.pro'
+EMAIL_HOST_PASSWORD = 'Rehan876685$'
+DEFAULT_FROM_EMAIL = "Rehan <admin@prodev.pro>"
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
