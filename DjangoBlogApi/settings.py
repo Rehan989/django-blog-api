@@ -53,7 +53,7 @@ INSTALLED_APPS = [
 
 # Cors header configuration
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000"
+    "http://localhost:3000",
     "https://blog.prodev.pro",
     "http://blog.prodev.pro"
 ]
