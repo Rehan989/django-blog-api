@@ -6,7 +6,7 @@ pipeline {
                 sh 'cd /home/ubuntu/jenkins/workspace/django-blog-api_main'
                 sh 'sudo apt install python3-virtualenv'
                 sh 'sudo apt update'
-                sh 'source env/bin/activate'
+                sh '. env/bin/activate'
                 sh 'pip install -r requirements.txt'
             }
         }
