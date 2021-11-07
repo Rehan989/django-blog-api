@@ -1,28 +1,28 @@
 {% load i18n %}
 
 {% block subject %}
-{% blocktrans %}Account activation on localhost:3000{% endblocktrans %}
+{% blocktrans %}Account activation on blog.prodev.pro{% endblocktrans %}
 {% endblock subject %}
 
 {% block text_body %}
-{% blocktrans %}You're receiving this email because you need to finish activation process on localhost:3000.{% endblocktrans %}
+{% blocktrans %}You're receiving this email because you need to finish activation process on blog.prodev.pro.{% endblocktrans %}
 
 {% trans "Please go to the following page to activate account:" %}
 {{ protocol }}://{{ domain }}/{{ url|safe }}
 
 {% trans "Thanks for using our site!" %}
 
-{% blocktrans %}The localhost:3000 team{% endblocktrans %}
+{% blocktrans %}The Prodev team{% endblocktrans %}
 {% endblock text_body %}
 
 {% block html_body %}
-<p>{% blocktrans %}You're receiving this email because you need to finish activation process on localhost:3000.{% endblocktrans %}</p>
+<p>{% blocktrans %}You're receiving this email because you need to finish activation process on blog.prodev.pro.{% endblocktrans %}</p>
 
 <p>{% trans "Please go to the following page to activate account:" %}</p>
-<p><a href="{{ protocol }}://localhost:3000/{{ url|safe }}">{{ protocol }}://localhost:3000/{{ url|safe }}</a></p>
+<p><a href="{{ protocol }}://blog.prodev.pro/{{ url|safe }}">{{ protocol }}://blog.prodev.pro/{{ url|safe }}</a></p>
 
 <p>{% trans "Thanks for using our site!" %}</p>
 
-<p>{% blocktrans %}The localhost:3000 team{% endblocktrans %}</p>
+<p>{% blocktrans %}The Prodev team{% endblocktrans %}</p>
 
 {% endblock html_body %}
