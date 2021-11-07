@@ -12,10 +12,10 @@ pipeline {
         }
         stage('tesing') {
             steps {
-                sh 'cd /home/ubuntu/jenkins/workspace/Django-prodev-blog-app_main'
+                sh 'cd /home/ubuntu/jenkins/workspace/django-blog-api_main'
                 sh '. env/bin/activate'
                 sh 'python3 manage.py makemigrations'
-                sh 'python3 manage.py migrate'
+                sh 'python3 manage.py migrate --run-syncdb'
                 sh 'python3 manage.py collectstatic --noinput'
                 sh 'python3 manage.py test'
             }
