@@ -5,8 +5,8 @@ pipeline {
             steps {
                 sh 'cd /home/ubuntu/jenkins/workspace/Django-prodev-blog-app_main'
                 sh 'sudo apt install python3-virtualenv'
-                sh 'sudo apt install'
-                sh '. env/bin/activate'
+                sh 'sudo apt update'
+                sh 'source env/bin/activate'
                 sh 'pip install -r requirements.txt'
             }
         }
