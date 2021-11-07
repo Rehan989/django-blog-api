@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('build') {
             steps {
-                sh 'cd /home/ubuntu/jenkins/workspace/Django-prodev-blog-app_main'
+                sh 'cd /home/ubuntu/jenkins/workspace/django-blog-api_main'
                 sh 'sudo apt install python3-virtualenv'
                 sh 'sudo apt update'
                 sh 'source env/bin/activate'
