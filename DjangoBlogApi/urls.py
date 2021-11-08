@@ -23,3 +23,5 @@ urlpatterns = [
     path('blog/', include('blogapi.urls')),
     path('user/', include('userauthapi.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+

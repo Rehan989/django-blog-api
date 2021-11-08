@@ -15,6 +15,7 @@ pipeline {
                 sh '. env/bin/activate'
                 sh 'python3 manage.py makemigrations'
                 sh 'python3 manage.py migrate --run-syncdb'
+                sh 'python3 manage.py collectstatic --noinput'
                 sh 'python3 manage.py test'
             }
         }
