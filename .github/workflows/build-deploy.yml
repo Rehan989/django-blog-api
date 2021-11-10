@@ -30,4 +30,4 @@ jobs:
       - name: tagging docker image
         run: docker tag django-blog-api rehan989/django-blog-api
       - name: pushing image to docker-hub
-        run: docker push rehan989/django-blog-api:latest
+        run: docker push rehan989/django-blog-api
