@@ -1,18 +1,13 @@
-name: Build and Deply Code
+name: CI/CD pipeline for django-blog-api
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  job1:
-    env:
-      SECRET_KEY: django-insecure--n6t$=^+p+(b188e-5phqheprmpikg-sidiyu8hgrbe64u)akh
-      DEBUG: True
-      EMAIL_USE_SSL: True
-      EMAIL_HOST: smtpout.secureserver.net
-      EMAIL_PORT: 465
-      EMAIL_HOST_USER: admin@prodev.pro
-      EMAIL_HOST_PASSWORD: Rehan876685$
-      DEFAULT_FROM_EMAIL: Rehan <admin@prodev.pro>
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: pulling git repo
@@ -21,9 +16,15 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: "3.9"
-      - name: update pip
+      - name: updating packages
+        run: apt update
         run: python3 -m pip install --upgrade pip
-      - name: install all dependencies
-        run: pip install -r requirements.txt
-      - name: testing our code
-        run: python3 manage.py test
+      - name: setting up docker
+        uses: docker-practice/actions-setup-docker@master
+      - name: login to docker hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: building image for deployment
+        run: docker build -t django-blog-api:0.1.0 .
