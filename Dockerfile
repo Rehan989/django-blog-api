@@ -1,5 +1,5 @@
 FROM python:3.9-slim-buster
-WORKDIR /django-blog-api
+WORKDIR /app
 EXPOSE 8000
 COPY requirements.txt .
 RUN pip install -r requirements.txt
@@ -13,8 +13,6 @@ ENV EMAIL_HOST_USER=admin@prodev.pro
 ENV EMAIL_HOST_PASSWORD=Rehan876685$
 ENV DEFAULT_FROM_EMAIL="Rehan <admin@prodev.pro>"
 COPY . .
-RUN ["python3", "manage.py", "makemigrations"]
-RUN ["python3", "manage.py", "migrate", "--run-syncdb"]
-RUN ["python3", "manage.py", "collectstatic", "--no-input"]
+RUN ["python3", "manage.py", "test"]
 ENTRYPOINT ["python3", "manage.py"]
 CMD ["runserver", "0.0.0.0:8000"]

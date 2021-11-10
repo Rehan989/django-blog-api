@@ -98,7 +98,7 @@ WSGI_APPLICATION = 'DjangoBlogApi.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / 'data/db.sqlite3',
     }
 }
 
@@ -201,3 +201,7 @@ CACHES = {
         'LOCATION': '/var/tmp/django_cache',
     }
 }
+
+# aws access key and secret key
+# access - AKIAYMRZ2E63J663TA7N
+# secret - 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
