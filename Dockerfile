@@ -2,8 +2,8 @@ FROM python:3.9-slim-buster
 WORKDIR /django-blog-api
 EXPOSE 8000
 COPY requirements.txt .
-RUN apt update
 RUN pip install -r requirements.txt
+RUN apt update
 ENV PYTHONUNBUFFERED=1
 ENV SECRET_KEY="django-insecure--n6t$=^+p+(b188e-5phqheprmpikg-sidiyu8hgrbe64u)akh"
 ENV EMAIL_USE_SSL=True

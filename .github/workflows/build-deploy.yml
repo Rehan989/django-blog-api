@@ -26,4 +26,8 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: building image for deployment
-        run: docker build -t django-blog-api:0.1.0 .
+        run: docker build -t django-blog-api:latest .
+      - name: tagging docker image
+        run: docker tag django-blog-api rehan989/django-blog-api
+      - name: pushing image to docker-hub
+        run: docker push rehan989/django-blog-api:latest
