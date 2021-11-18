@@ -7,7 +7,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('blog/', include('blogapi.urls')),
     path('user/', include('userauthapi.urls')),
-    path(r'^accounts/', include('allauth.urls'), name='socialaccount_signup'),
+    path('accounts/', include('allauth.urls'), name='socialaccount_signup'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
