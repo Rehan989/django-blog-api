@@ -51,6 +51,16 @@ INSTALLED_APPS = [
     'DjangoBlogApi',
     'blogapi',
     'userauthapi',
+
+
+    "django.contrib.sites",
+    # Auth & social auth
+    "dj_rest_auth",
+    "allauth",
+    "allauth.account",
+    "dj_rest_auth.registration",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
 ]
 
 # Cors header configuration
@@ -205,3 +215,21 @@ CACHES = {
 # aws access key and secret key
 # access - AKIAYMRZ2E63J663TA7N
 # secret - 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
+
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+            'username'
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
+SITE_ID = 1
+
+SOCIALACCOUNT_EMAIL_VERIFICATION = "none"
+SOCIALACCOUNT_EMAIL_REQUIRED = False
