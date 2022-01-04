@@ -4,10 +4,8 @@ import requests
 from djoser.conf import django_settings
 from rest_framework.views import APIView
 from rest_framework import permissions
-from django.urls import reverse
 from djoser import email
 from rest_framework.decorators import (
-    api_view,
     permission_classes,
 )
 # Create your views here.
@@ -96,8 +94,8 @@ class ActivationEmail(email.ActivationEmail):
     template_name = 'email/activation.html'
 
 
-class GoogleLogin(SocialLoginView):
+class GoogleSignup(SocialLoginView):
     authentication_classes = [] # disable authentication
     adapter_class = GoogleOAuth2Adapter
-    callback_url = "http://localhost:3000"
+    callback_url = "https://blog.prodev.pro"
     client_class = OAuth2Client

@@ -171,6 +171,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        "dj_rest_auth.utils.JWTCookieAuthentication"
     ),
 }
 
@@ -222,7 +223,6 @@ SOCIALACCOUNT_PROVIDERS = {
         'SCOPE': [
             'profile',
             'email',
-            'username'
         ],
         'AUTH_PARAMS': {
             'access_type': 'online',
@@ -230,6 +230,6 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 SITE_ID = 1
-
+REST_USE_JWT = True
 SOCIALACCOUNT_EMAIL_VERIFICATION = "none"
 SOCIALACCOUNT_EMAIL_REQUIRED = False
